@@ -33,7 +33,7 @@ function spreadLabels(items, minGap, top, bottom) {
   return sorted.map((d, i) => ({ ...d, labelY: ys[i] }))
 }
 
-export default function TimeChart({ values, tEnd, points = 60 }) {
+export default function TimeChart({ values, tEnd, points = 200 }) {
   const wrapRef = useRef(null)
   const [width, setWidth] = useState(0)
 
@@ -139,7 +139,7 @@ export default function TimeChart({ values, tEnd, points = 60 }) {
               const color = PALETTE[i % PALETTE.length]
               return (
                 <Line
-                  key={key} type="monotone" dataKey={key} name={key}
+                  key={key} type="natural" dataKey={key} name={key}
                   stroke={color} dot={false} strokeWidth={1.8} isAnimationActive={false}
                   activeDot={{ r: 4, fill: color, stroke: '#fff', strokeWidth: 2 }}
                 />

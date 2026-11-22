@@ -7,16 +7,18 @@ function choice(arr) { return arr[Math.floor(Math.random() * arr.length)] }
 const K_KEYS = Array.from({ length: 12 }, (_, i) => `K${i + 1}`)
 
 const K_TREND = {
-  K1: 'down', K2: 'down', K3: 'down', K4: 'up', K5: 'up', K6: 'up',
-  K7: 'up', K8: 'down', K9: 'up', K10: 'up', K11: 'down', K12: 'up',
+  K1: 'up', K2: 'up', K3: 'down', K4: 'up', K5: 'up', K6: 'up',
+  K7: 'up', K8: 'up', K9: 'down', K10: 'down', K11: 'down', K12: 'down',
 }
 
 function randomKValue(key) {
   const trend = K_TREND[key] ?? 'up'
-  const ratio = trend === 'down'
-    ? 0.55 + Math.random() * 0.35
-    : 0.10 + Math.random() * 0.35
-  return Math.round(ratio * 100) / 100
+  if (trend === 'down') {
+    // Падающие стартуют высоко (0.55..0.75)
+    return Math.round((0.55 + Math.random() * 0.20) * 100) / 100
+  }
+  // Растущие стартуют низко (0.05..0.25)
+  return Math.round((0.05 + Math.random() * 0.20) * 100) / 100
 }
 
 export function randomK() {
@@ -76,6 +78,9 @@ export function randomOneValue(key) {
   return 0
 }
 
+const clamp01 = (v) => Math.max(0, Math.min(1, v))
+const round2 = (v) => Math.round(v * 100) / 100
+
 export function randomConditions(values, tEnd = 10) {
   const result = {}
   if (!values) {
@@ -83,57 +88,43 @@ export function randomConditions(values, tEnd = 10) {
     return result
   }
 
-  // 1) Сэмплируем K(t) на [0, tEnd], берём max по каждому ключу
-  const SAMPLE = 40
-  const maxK = {}
-  K_KEYS.forEach((k) => { maxK[k] = 0 })
-
-  for (let i = 0; i <= SAMPLE; i++) {
-    const t = (i / SAMPLE) * tEnd
-    let state
-    try {
-      state = evaluateAll(t, values, tEnd)
-    } catch {
-      continue
-    }
-    if (!state) continue
-    K_KEYS.forEach((k) => {
-      const v = Number(state[k])
-      if (Number.isFinite(v) && v > maxK[k]) maxK[k] = v
-    })
+  // 1. Получаем стартовое состояние K(0) для всех лепестков
+  let startState = null
+  try {
+    startState = evaluateAll(0, values, tEnd)
+  } catch {
+    K_KEYS.forEach((k) => { result[k] = values[k] ?? 0.5 })
+    return result
   }
 
-  // 2) Генерируем условия для красной линии
+  // 2. Базовая форма = K(0)
+  const base = {}
   K_KEYS.forEach((k) => {
-    const k0 = values[k] ?? 0
-    const m = maxK[k]         
-    const growth = m - k0     
+    base[k] = Number(startState[k] ?? 0)
+  })
 
-    let cond
+  // 3. Сглаживаем форму по соседям (чтобы убрать острые углы "звезды")
+  // Делаем 3 прохода для хорошего округления
+  let smoothed = { ...base }
+  for (let pass = 0; pass < 3; pass++) {
+    const next = {}
+    K_KEYS.forEach((k, idx) => {
+      const prev = K_KEYS[(idx + K_KEYS.length - 1) % K_KEYS.length]
+      const nextKey = K_KEYS[(idx + 1) % K_KEYS.length]
+      // Веса: 0.4 — сам лепесток, 0.3 и 0.3 — соседи
+      const blend = 0.4 * smoothed[k] + 0.3 * smoothed[prev] + 0.3 * smoothed[nextKey]
+      // ЖЕСТКАЯ ГАРАНТИЯ: не опускаем ниже начального значения в этой точке
+      next[k] = Math.max(blend, base[k])
+    })
+    smoothed = next
+  }
 
-    if (growth <= 0.05) {
-      cond = k0 + 0.05 + Math.random() * 0.1
-    } else {
-      const mode = Math.random()
-      
-      if (mode < 0.3) {
-        cond = m + 0.02 + Math.random() * 0.1
-      } else {
-
-        const minCond = k0 + 0.05 
-        const maxCond = m - 0.02  
-        
-        if (minCond < maxCond) {
-          cond = minCond + Math.random() * (maxCond - minCond)
-        } else {
-          cond = k0 + 0.05 + Math.random() * 0.1
-        }
-      }
-    }
-    
-    if (cond > 1) cond = 1
-    if (cond < 0) cond = 0
-    result[k] = Math.round(cond * 100) / 100
+  // 4. Финальный результат: сглаженная форма плюс небольшой отступ, 
+  // чтобы линия не сливалась с графиком t=0
+  const margin = 0.07
+  K_KEYS.forEach((k) => {
+    const cond = clamp01(smoothed[k] + margin)
+    result[k] = round2(cond)
   })
 
   return result

@@ -37,7 +37,7 @@ const INITIAL_VALUES = (() => {
 
 export default function App() {
   const [values, setValues] = useState(INITIAL_VALUES)
-  const [tEnd, setTEnd] = useState(10)
+  const [tEnd, setTEnd] = useState(24)
   const [conditions, setConditions] = useState(makeDefaultConditions)
 
   const updateValue = (key, val) => setValues((p) => ({ ...p, [key]: val }))
@@ -98,10 +98,9 @@ export default function App() {
         <main className="main">
           <SourceSystem />
           
-          {/* Передаем пропсы в матрицу! */}
           <MatrixView values={values} tEnd={tEnd} /> 
           
-          <TimeChart values={values} tEnd={tEnd} points={60} />
+          <TimeChart values={values} tEnd={tEnd} points={100} />
           <RadarChart
             values={values}
             tEnd={tEnd}
