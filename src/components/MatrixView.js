@@ -97,6 +97,27 @@ export default function MatrixView() {
           <span className="text-neutral">Наведи на ячейку, чтобы увидеть расшифровку связи</span>
         )}
       </div>
+      <a 
+            href={`${process.env.PUBLIC_URL || ''}/memo.pdf`} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="btn"
+            style={{ 
+              background: '#059669', 
+              color: 'white', 
+              textDecoration: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              fontSize: '14px',
+              fontWeight: '500',
+              display: 'inline-flex',
+              alignItems: 'center',
+              marginTop: '12px',
+              gap: '8px'
+            }}
+          >
+            Открыть Памятку
+          </a>
     </div>
   )
 }

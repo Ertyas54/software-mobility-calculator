@@ -16,18 +16,40 @@ const K_TITLES = {
 }
 
 const FORMULAS = {
-  K1:  'dK₁/dt = f₁(K₃)·f₂(K₈)·(R₃+R₄) − (f₃(K₄)·f₄(K₅)·f₅(K₆)·f₆(K₉)·f₇(K₁₂)·(R₁+R₂))',
-  K2:  'dK₂/dt = f₈(K₁)·f₉(K₃)·f₁₀(K₈)·f₁₁(K₁₁)·(R₃+R₄) − (f₁₂(K₄)·R₁)',
-  K3:  'dK₃/dt = (R₃+R₄) − (f₁₃(K₄)·f₁₄(K₆)·f₁₅(K₁₂)·(R₁+R₂))',
-  K4:  'dK₄/dt = f₁₆(K₅)·f₁₇(K₁₂)·(R₁+R₂) − (f₁₈(K₃)·R₄)',
-  K5:  'dK₅/dt = f₁₉(K₄)·(R₁+R₂) − R₄',
-  K6:  'dK₆/dt = f₂₀(K₁₂)·R₂ − (f₂₁(K₃)·R₄)',
-  K7:  'dK₇/dt = f₂₂(K₄)·f₂₃(K₉)·f₂₄(K₁₂)·R₁',
-  K8:  'dK₈/dt = f₂₅(K₃)·(R₃+R₄) − (f₂₆(K₄)·f₂₇(K₅)·f₂₈(K₆)·f₂₉(K₇)·f₃₀(K₉)·f₃₁(K₁₂)·R₂)',
-  K9:  'dK₉/dt = (R₁+R₂) − (f₃₂(K₂)·f₃₃(K₁₂))',
-  K10: 'dK₁₀/dt = f₃₄(K₆)·f₃₅(K₇) − (f₃₆(K₃)·f₃₇(K₈)·R₃)',
-  K11: 'dK₁₁/dt = f₃₈(K₁)·f₃₉(K₈)·R₃ − (f₄₀(K₇)·f₄₁(K₉)·f₄₂(K₁₂))',
-  K12: 'dK₁₂/dt = f₄₃(K₄)·f₄₄(K₅)·f₄₅(K₇)·f₄₆(K₁₀)·(R₁+R₂) − (f₄₇(K₁)·f₄₈(K₈)·f₄₉(K₁₁))',
+  K1:  'dK₁/dt = f₁⁺¹(K₃)·f₂⁺¹(K₈)·(R₃+R₄) − (f₃⁻¹(K₄)·f₄⁻¹(K₅)·f₅⁻¹(K₆)·f₆⁻¹(K₉)·f₇⁻¹(K₁₂)·(R₁+R₂))',
+  K2:  'dK₂/dt = f₈⁺¹(K₁)·f₉⁺¹(K₃)·f₁₀⁺¹(K₈)·f₁₁⁺¹(K₁₁)·(R₃+R₄) − (f₁₂⁻¹(K₄)·R₁)',
+  K3:  'dK₃/dt = (R₃+R₄) − (f₁₃⁻¹(K₄)·f₁₄⁻¹(K₆)·f₁₅⁻¹(K₁₂)·(R₁+R₂))',
+  K4:  'dK₄/dt = f₁₆⁺¹(K₅)·f₁₇⁺¹(K₁₂)·(R₁+R₂) − (f₁₈⁻¹(K₃)·R₄)',
+  K5:  'dK₅/dt = f₁₉⁺¹(K₄)·(R₁+R₂) − R₄',
+  K6:  'dK₆/dt = f₂₀⁺¹(K₁₂)·R₂ − (f₂₁⁻¹(K₃)·R₄)',
+  K7:  'dK₇/dt = f₂₂⁺¹(K₄)·f₂₃⁺¹(K₉)·f₂₄⁺¹(K₁₂)·R₁',
+  K8:  'dK₈/dt = f₂₅⁺¹(K₃)·(R₃+R₄) − (f₂₆⁻¹(K₄)·f₂₇⁻¹(K₅)·f₂₈⁻¹(K₆)·f₂₉⁻¹(K₇)·f₃₀⁻¹(K₉)·f₃₁⁻¹(K₁₂)·R₂)',
+  K9:  'dK₉/dt = (R₁+R₂) − (f₃₂⁻¹(K₂)·f₃₃⁻¹(K₁₂))',
+  K10: 'dK₁₀/dt = f₃₄⁺¹(K₆)·f₃₅⁺¹(K₇) − (f₃₆⁻¹(K₃)·f₃₇⁻¹(K₈)·R₃)',
+  K11: 'dK₁₁/dt = f₃₈⁺¹(K₁)·f₃₉⁺¹(K₈)·R₃ − (f₄₀⁻¹(K₇)·f₄₁⁻¹(K₉)·f₄₂⁻¹(K₁₂))',
+  K12: 'dK₁₂/dt = f₄₃⁺¹(K₄)·f₄₄⁺¹(K₅)·f₄₅⁺¹(K₇)·f₄₆⁺¹(K₁₀)·(R₁+R₂) − (f₄₇⁻¹(K₁)·f₄₈⁻¹(K₈)·f₄₉⁻¹(K₁₁))',
+}
+
+function renderFormula(text) {
+  const parts = text.split(/(⁺¹|⁻¹)/g)
+  
+  return parts.map((part, index) => {
+    if (part === '⁺¹') {
+      return (
+        <span key={index} style={{ color: '#059669', fontWeight: 'bold' }}>
+          {part}
+        </span>
+      )
+    }
+    if (part === '⁻¹') {
+      return (
+        <span key={index} style={{ color: '#dc2626', fontWeight: 'bold' }}>
+          {part}
+        </span>
+      )
+    }
+    return <React.Fragment key={index}>{part}</React.Fragment>
+  })
 }
 
 export default function SourceSystem() {
@@ -38,7 +60,9 @@ export default function SourceSystem() {
         {Object.keys(K_TITLES).map((key) => (
           <div className="source-row" key={key}>
             <span className="source-title">{K_TITLES[key]}:</span>
-            <span className="source-formula">{FORMULAS[key]}</span>
+            <span className="source-formula" style={{ lineHeight: '1.8' }}>
+              {renderFormula(FORMULAS[key])}
+            </span>
           </div>
         ))}
       </div>
