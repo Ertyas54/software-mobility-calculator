@@ -10,7 +10,7 @@ export default function InitialValues({ values, onChange }) {
   return (
     <div className="panel">
       <div className="panel-header">
-        <h3>Начальные значения K(0)</h3>
+        <h3>Начальные значения K(i)</h3>
         <span className="panel-hint">от 0 до 1</span>
       </div>
       <div className="compact-grid">
