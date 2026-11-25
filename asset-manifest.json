@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/software-mobility-calculator/static/css/main.e4cc1b07.css",
-    "main.js": "/software-mobility-calculator/static/js/main.49dc262c.js",
+    "main.js": "/software-mobility-calculator/static/js/main.97c04dc0.js",
     "index.html": "/software-mobility-calculator/index.html",
     "main.e4cc1b07.css.map": "/software-mobility-calculator/static/css/main.e4cc1b07.css.map",
-    "main.49dc262c.js.map": "/software-mobility-calculator/static/js/main.49dc262c.js.map"
+    "main.97c04dc0.js.map": "/software-mobility-calculator/static/js/main.97c04dc0.js.map"
   },
   "entrypoints": [
     "static/css/main.e4cc1b07.css",
-    "static/js/main.49dc262c.js"
+    "static/js/main.97c04dc0.js"
   ]
 }
